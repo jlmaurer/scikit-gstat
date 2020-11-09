@@ -375,6 +375,7 @@ class Variogram(object):
             * **'uniform'**: Use skgstat.binning.uniform_count_lags for using
               n_lags lags up to maxlag in which the pairwise differences
               follow a uniform distribution.
+            * **'raw'**: Use the raw data without binning
 
         Returns
         -------
@@ -392,6 +393,8 @@ class Variogram(object):
             self._bin_func = binning.even_width_lags
         elif bin_func.lower() == 'uniform':
             self._bin_func = binning.uniform_count_lags
+        elif bin_func.lower() == 'raw':
+            self._bin_func = binning.raw
         else:
             raise ValueError('%s binning method is not known' % bin_func)
 
