@@ -549,6 +549,7 @@ class Variogram(object):
 
         _x = x[~np.isnan(y)]
         _y = y[~np.isnan(y)]
+        import pdb; pdb.set_trace()
         regr = IsotonicRegression(increasing=True).fit(_x, _y)
 
         # create the model function
