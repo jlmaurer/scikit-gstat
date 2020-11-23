@@ -278,8 +278,9 @@ class OrdinaryKriging:
         if self.n_jobs is None or self.n_jobs == 1:
             z = np.fromiter(map(self._estimator, *x), dtype=float)
         else:
-            def f(*coords):
-                return self._estimator(*coords)
+            f = get_estimator(self._estimator)
+#            def f(*coords):
+#                return self._estimator(*coords)
             with Pool(self.n_jobs) as p:
                 z = p.starmap(f, zip(*x))
 
@@ -317,6 +318,7 @@ class OrdinaryKriging:
             return np.nan
 
         # TODO: This is a side-effect and I need to re-design this part:
+        import pdb; 
         self.sigma[self.__sigma_index] = sigma
         self.__sigma_index += 1
 
@@ -462,7 +464,7 @@ class OrdinaryKriging:
         # calculate Kriging variance
         # sigma is the weights times the semi-variance to p0 
         # plus the lagrange factor 
-        sigma = sum(b[:-1] * l[:-1]) + l[-1]
+        sigma = self._nugget**2 - np.dot(l[:-1], b[:-1]) + l[-1]
 
         # calculate Z
         Z = l[:-1].dot(values)
@@ -498,3 +500,9 @@ class OrdinaryKriging:
         g[in_] = self._prec_g[dist_n[in_]]
 
         return g
+
+
+def get_estimator(F, *args):
+    ''' Return an estimator '''
+    return F.deepcopy()
+

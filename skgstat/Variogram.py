@@ -416,7 +416,6 @@ class Variogram(object):
     def bins(self):
         if self._bins is None:
             self._bins = self.bin_func(self.distance, self.n_lags, self.maxlag)
-
         return self._bins.copy()
 
     @bins.setter
